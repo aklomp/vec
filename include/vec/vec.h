@@ -96,3 +96,29 @@ union vec {
 	} neon;
 #endif
 };
+
+// Compile-time constant instantiation macros:
+#define VEC(a, b, c, d) \
+	((union vec) { .elem.f = { (a), (b), (c), (d) } })
+
+#define VEC_I(a, b, c, d) \
+	((union vec) { .elem.i = { (a), (b), (c), (d) } })
+
+#define VEC_U(a, b, c, d) \
+	((union vec) { .elem.u = { (a), (b), (c), (d) } })
+
+// Include platform-specific function definitions. The most "powerful"
+// definitions come first and get a chance to declare functions. What they
+// cannot define will eventually be defined by a "less powerful" file. The
+// generic file acts as a catch-all in case none of the more powerful methods
+// are available.
+
+#if defined(VEC_SSE2)
+  #include "private/sse2.h"
+#endif
+
+#if defined(VEC_NEON)
+  #include "private/neon_intrin.h"
+#endif
+
+#include "private/generic.h"
