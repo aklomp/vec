@@ -125,3 +125,91 @@ vec_to_float (const union vec v)
 	return (union vec) { .neon.f = vcvtq_f32_s32(v.neon.i) };
 }
 #endif
+
+// Return float version of a + b:
+#ifndef VEC_FN_ADD
+#define VEC_FN_ADD
+static inline union vec
+vec_add (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.f = vaddq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a + b:
+#ifndef VEC_FN_IADD
+#define VEC_FN_IADD
+static inline union vec
+vec_iadd (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.i = vaddq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return unsigned integer version of a + b:
+#ifndef VEC_FN_UADD
+#define VEC_FN_UADD
+static inline union vec
+vec_uadd (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vaddq_u32(a.neon.u, b.neon.u) };
+}
+#endif
+
+// Return float version of a - b:
+#ifndef VEC_FN_SUB
+#define VEC_FN_SUB
+static inline union vec
+vec_sub (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.f = vsubq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a - b:
+#ifndef VEC_FN_ISUB
+#define VEC_FN_ISUB
+static inline union vec
+vec_isub (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.i = vsubq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return unsigned integer version of a - b:
+#ifndef VEC_FN_USUB
+#define VEC_FN_USUB
+static inline union vec
+vec_usub (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vsubq_u32(a.neon.u, b.neon.u) };
+}
+#endif
+
+// Return float version of a * b:
+#ifndef VEC_FN_MUL
+#define VEC_FN_MUL
+static inline union vec
+vec_mul (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.f = vmulq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return float version of a / b (intrinsics version):
+#ifndef VEC_FN_DIV
+#define VEC_FN_DIV
+static inline union vec
+vec_div (const union vec a, const union vec b)
+{
+	// Estimate reciprocal of b:
+	float32x4_t recp = vrecpeq_f32(b.neon.f);
+
+	// Refine the estimate using Newton-Raphson:
+	recp = vmulq_f32(vrecpsq_f32(b.neon.f, recp), recp);
+	recp = vmulq_f32(vrecpsq_f32(b.neon.f, recp), recp);
+
+	// Multiply by the reciprocal to approximate a / b:
+	return (union vec) { .neon.f = vmulq_f32(a.neon.f, recp) };
+}
+#endif

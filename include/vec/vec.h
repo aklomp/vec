@@ -23,8 +23,12 @@
   #if defined(__ARM_NEON__) || defined(__ARM_NEON)
     #define VEC_NEON
     #include <arm_neon.h>
-  #endif
 
+    // GCC and Clang support inline assembly:
+    #if defined(__GNUC__) || defined(__clang_major__)
+      #define VEC_NEON_ASM
+    #endif
+  #endif
 #endif
 
 // Define architecture-independent vector types.
@@ -117,8 +121,16 @@ union vec {
   #include "private/sse2.h"
 #endif
 
+#if defined(VEC_NEON_ASM)
+  #include "private/neon_asm.h"
+#endif
+
 #if defined(VEC_NEON)
   #include "private/neon_intrin.h"
+#endif
+
+#if defined(VEC_GCC)
+  #include "private/gcc.h"
 #endif
 
 #include "private/generic.h"
