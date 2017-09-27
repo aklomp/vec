@@ -105,3 +105,23 @@ vec_uzero (void)
 	return vec_u1(0U);
 }
 #endif
+
+// Convert a float vector to signed integer:
+#ifndef VEC_FN_TO_INT
+#define VEC_FN_TO_INT
+static inline union vec
+vec_to_int (const union vec v)
+{
+	return (union vec) { .neon.i = vcvtq_s32_f32(v.neon.f) };
+}
+#endif
+
+// Convert a signed integer vector to float:
+#ifndef VEC_FN_TO_FLOAT
+#define VEC_FN_TO_FLOAT
+static inline union vec
+vec_to_float (const union vec v)
+{
+	return (union vec) { .neon.f = vcvtq_f32_s32(v.neon.i) };
+}
+#endif
