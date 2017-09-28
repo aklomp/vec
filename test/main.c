@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include <math.h>
 
 #include <vec/vec.h>
 
@@ -50,6 +51,15 @@
 #define IF_NOT_EQUALS_U(xe, ye, ze, we, v) \
 	if (v.xu != (xe) || v.yu != (ye) || v.zu != (ze) || v.wu != (we)) \
 		if (ERROR_EXPECT_U((xe), (ye), (ze), (we), v))
+
+// Approximate float comparison:
+#define APPROX(a, b) \
+	(fabsf((a) - (b)) <= fabsf((a) * 0.01f))
+
+// Open an 'if' statement block if float values are not approximately equal
+#define IF_NOT_APPROX(xe, ye, ze, we, v) \
+	if (!APPROX(v.x, (xe)) || !APPROX(v.y, (ye)) || !APPROX(v.z, (ze)) || !APPROX(v.w, (we))) \
+		if (ERROR_EXPECT_F((xe), (ye), (ze), (we), v))
 
 // Random floating-point test vectors:
 static const float fval[] = {
@@ -108,6 +118,7 @@ vtestu (const size_t start)
 }
 
 // Add individual test functions:
+#include "test_arith.h"
 #include "test_convert.h"
 #include "test_instantiate.h"
 #include "test_offsets.h"
@@ -122,6 +133,7 @@ main (void)
 	ret |= test_sizes();
 	ret |= test_instantiate();
 	ret |= test_convert();
+	ret |= test_arith();
 
 	return ret;
 }
