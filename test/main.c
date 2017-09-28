@@ -51,7 +51,64 @@
 	if (v.xu != (xe) || v.yu != (ye) || v.zu != (ze) || v.wu != (we)) \
 		if (ERROR_EXPECT_U((xe), (ye), (ze), (we), v))
 
+// Random floating-point test vectors:
+static const float fval[] = {
+	-42.3f,    -0.4f,  0.1f, 5678.9f,
+	-3.33f, -2003.0f, 0.99f,  -23.5f,
+};
+
+// Signed integer test vectors:
+static const int32_t ival[] = {
+	INT32_C(-1000000),   INT32_C(-3), INT32_C(0x00000000), INT32_C(0xFFFFFFFF),
+	INT32_C(     -42),   INT32_C(27), INT32_C(0xABCDEF03), INT32_C(0x00000FFF),
+	INT32_C(0XFFFFFFFF), INT32_C( 0), INT32_C(0xFFFFFFFE), INT32_C(         1),
+};
+
+// Unsigned integer test vectors:
+static const uint32_t uval[] = {
+	UINT32_C(0x00000000), UINT32_C(0xDEADBEEF), UINT32_C(42), UINT32_C(0x12340000),
+	UINT32_C(0XFFFFFFFF), UINT32_C(0xFEDCBA98), UINT32_C(17), UINT32_C(0x00012345),
+	UINT32_C(0XFFFFFFFF), UINT32_C(0xFFFFFFFE), UINT32_C( 0), UINT32_C(         1),
+};
+
+// Return a floating-point vector with values from fval:
+static inline union vec
+vtestf (const size_t start)
+{
+	return vec(
+		fval[(start + 0U) % NELEM(fval)],
+		fval[(start + 1U) % NELEM(fval)],
+		fval[(start + 2U) % NELEM(fval)],
+		fval[(start + 3U) % NELEM(fval)]
+	);
+}
+
+// Return a signed integer vector with values from ival:
+static inline union vec
+vtesti (const size_t start)
+{
+	return vec_i(
+		ival[(start + 0U) % NELEM(ival)],
+		ival[(start + 1U) % NELEM(ival)],
+		ival[(start + 2U) % NELEM(ival)],
+		ival[(start + 3U) % NELEM(ival)]
+	);
+}
+
+// Return an unsigned integer vector with values from uval:
+static inline union vec
+vtestu (const size_t start)
+{
+	return vec_u(
+		uval[(start + 0U) % NELEM(uval)],
+		uval[(start + 1U) % NELEM(uval)],
+		uval[(start + 2U) % NELEM(uval)],
+		uval[(start + 3U) % NELEM(uval)]
+	);
+}
+
 // Add individual test functions:
+#include "test_convert.h"
 #include "test_instantiate.h"
 #include "test_offsets.h"
 #include "test_sizes.h"
@@ -64,6 +121,7 @@ main (void)
 	ret |= test_offsets();
 	ret |= test_sizes();
 	ret |= test_instantiate();
+	ret |= test_convert();
 
 	return ret;
 }
