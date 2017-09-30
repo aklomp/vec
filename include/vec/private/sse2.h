@@ -187,3 +187,45 @@ vec_div (const union vec a, const union vec b)
 	return (union vec) { .sse.f = _mm_div_ps(a.sse.f, b.sse.f) };
 }
 #endif
+
+// Return bitwise a AND b:
+#ifndef VEC_FN_AND
+#define VEC_FN_AND
+static inline union vec
+vec_and (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.u = _mm_and_si128(a.sse.u, b.sse.u) };
+}
+#endif
+
+// Return bitwise a OR b:
+#ifndef VEC_FN_OR
+#define VEC_FN_OR
+static inline union vec
+vec_or (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.u = _mm_or_si128(a.sse.u, b.sse.u) };
+}
+#endif
+
+// Return bitwise a XOR b:
+#ifndef VEC_FN_XOR
+#define VEC_FN_XOR
+static inline union vec
+vec_xor (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.u = _mm_xor_si128(a.sse.u, b.sse.u) };
+}
+#endif
+
+// Return bitwise NOT v:
+#ifndef VEC_FN_NOT
+#define VEC_FN_NOT
+static inline union vec
+vec_not (const union vec v)
+{
+	const __m128i allset = _mm_set1_epi32(INT32_C(0xFFFFFFFF));
+
+	return (union vec) { .sse.u = _mm_xor_si128(v.sse.u, allset) };
+}
+#endif

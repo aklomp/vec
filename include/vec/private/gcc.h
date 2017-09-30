@@ -77,3 +77,43 @@ vec_div (const union vec a, const union vec b)
 	return (union vec) { .gcc.f = a.gcc.f / b.gcc.f };
 }
 #endif
+
+// Return bitwise a AND b:
+#ifndef VEC_FN_AND
+#define VEC_FN_AND
+static inline union vec
+vec_and (const union vec a, const union vec b)
+{
+	return (union vec) { .gcc.u = a.gcc.u & b.gcc.u };
+}
+#endif
+
+// Return bitwise a OR b:
+#ifndef VEC_FN_OR
+#define VEC_FN_OR
+static inline union vec
+vec_or (const union vec a, const union vec b)
+{
+	return (union vec) { .gcc.u = a.gcc.u | b.gcc.u };
+}
+#endif
+
+// Return bitwise a XOR b:
+#ifndef VEC_FN_XOR
+#define VEC_FN_XOR
+static inline union vec
+vec_xor (const union vec a, const union vec b)
+{
+	return (union vec) { .gcc.u = a.gcc.u ^ b.gcc.u };
+}
+#endif
+
+// Return bitwise NOT v:
+#ifndef VEC_FN_NOT
+#define VEC_FN_NOT
+static inline union vec
+vec_not (const union vec v)
+{
+	return (union vec) { .gcc.u = ~v.gcc.u };
+}
+#endif
