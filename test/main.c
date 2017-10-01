@@ -121,6 +121,7 @@ vtestu (const size_t start)
 #include "test_arith.h"
 #include "test_convert.h"
 #include "test_instantiate.h"
+#include "test_logic.h"
 #include "test_offsets.h"
 #include "test_sizes.h"
 
@@ -134,6 +135,7 @@ main (void)
 	ret |= test_instantiate();
 	ret |= test_convert();
 	ret |= test_arith();
+	ret |= test_logic();
 
 	return ret;
 }
