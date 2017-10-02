@@ -229,3 +229,165 @@ vec_not (const union vec v)
 	return (union vec) { .sse.u = _mm_xor_si128(v.sse.u, allset) };
 }
 #endif
+
+// Return float version of a == b:
+#ifndef VEC_FN_EQ
+#define VEC_FN_EQ
+static inline union vec
+vec_eq (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.f = _mm_cmpeq_ps(a.sse.f, b.sse.f) };
+}
+#endif
+
+// Return signed integer version of a == b:
+#ifndef VEC_FN_IEQ
+#define VEC_FN_IEQ
+static inline union vec
+vec_ieq (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.i = _mm_cmpeq_epi32(a.sse.i, b.sse.i) };
+}
+#endif
+
+// Return float version of a == b:
+#ifndef VEC_FN_UEQ
+#define VEC_FN_UEQ
+static inline union vec
+vec_ueq (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.u = _mm_cmpeq_epi32(a.sse.u, b.sse.u) };
+}
+#endif
+
+// Return float version of a < b:
+#ifndef VEC_FN_LT
+#define VEC_FN_LT
+static inline union vec
+vec_lt (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.f = _mm_cmplt_ps(a.sse.f, b.sse.f) };
+}
+#endif
+
+// Return signed integer version of a < b:
+#ifndef VEC_FN_ILT
+#define VEC_FN_ILT
+static inline union vec
+vec_ilt (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.i = _mm_cmplt_epi32(a.sse.i, b.sse.i) };
+}
+#endif
+
+// Return unsigned integer version of a < b:
+#ifndef VEC_FN_ULT
+#define VEC_FN_ULT
+static inline union vec
+vec_ult (const union vec a, const union vec b)
+{
+	const __m128i bias = _mm_set1_epi32(INT32_C(0x80000000));
+
+	return (union vec) { .sse.i = _mm_cmplt_epi32(
+		_mm_sub_epi32(a.sse.i, bias),
+		_mm_sub_epi32(b.sse.i, bias)) };
+}
+#endif
+
+// Return float version of a <= b:
+#ifndef VEC_FN_LE
+#define VEC_FN_LE
+static inline union vec
+vec_le (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.f = _mm_cmple_ps(a.sse.f, b.sse.f) };
+}
+#endif
+
+// Return signed integer version of a <= b:
+#ifndef VEC_FN_ILE
+#define VEC_FN_ILE
+static inline union vec
+vec_ile (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.i = _mm_or_si128(
+		_mm_cmplt_epi32(a.sse.i, b.sse.i),
+		_mm_cmpeq_epi32(a.sse.i, b.sse.i)) };
+}
+#endif
+
+// Return unsigned integer version of a <= b:
+#ifndef VEC_FN_ULE
+#define VEC_FN_ULE
+static inline union vec
+vec_ule (const union vec a, const union vec b)
+{
+	return vec_or(vec_ult(a, b), vec_ueq(a, b));
+}
+#endif
+
+// Return float version of a > b:
+#ifndef VEC_FN_GT
+#define VEC_FN_GT
+static inline union vec
+vec_gt (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.f = _mm_cmpgt_ps(a.sse.f, b.sse.f) };
+}
+#endif
+
+// Return signed integer version of a > b:
+#ifndef VEC_FN_IGT
+#define VEC_FN_IGT
+static inline union vec
+vec_igt (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.i = _mm_cmpgt_epi32(a.sse.i, b.sse.i) };
+}
+#endif
+
+// Return unsigned integer version of a > b:
+#ifndef VEC_FN_UGT
+#define VEC_FN_UGT
+static inline union vec
+vec_ugt (const union vec a, const union vec b)
+{
+	const __m128i bias = _mm_set1_epi32(INT32_C(0x80000000));
+
+	return (union vec) { .sse.i = _mm_cmpgt_epi32(
+		_mm_sub_epi32(a.sse.i, bias),
+		_mm_sub_epi32(b.sse.i, bias)) };
+}
+#endif
+
+// Return float version of a >= b:
+#ifndef VEC_FN_GE
+#define VEC_FN_GE
+static inline union vec
+vec_ge (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.f = _mm_cmpge_ps(a.sse.f, b.sse.f) };
+}
+#endif
+
+// Return signed integer version of a >= b:
+#ifndef VEC_FN_IGE
+#define VEC_FN_IGE
+static inline union vec
+vec_ige (const union vec a, const union vec b)
+{
+	return (union vec) { .sse.i = _mm_or_si128(
+		_mm_cmpgt_epi32(a.sse.i, b.sse.i),
+		_mm_cmpeq_epi32(a.sse.i, b.sse.i)) };
+}
+#endif
+
+// Return unsigned integer version of a >= b:
+#ifndef VEC_FN_UGE
+#define VEC_FN_UGE
+static inline union vec
+vec_uge (const union vec a, const union vec b)
+{
+	return vec_or(vec_ugt(a, b), vec_ueq(a, b));
+}
+#endif

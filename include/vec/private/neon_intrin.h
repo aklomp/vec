@@ -253,3 +253,153 @@ vec_not (const union vec v)
 	return (union vec) { .neon.u = vmvnq_u32(v.neon.u) };
 }
 #endif
+
+// Return float version of a == b:
+#ifndef VEC_FN_EQ
+#define VEC_FN_EQ
+static inline union vec
+vec_eq (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vceqq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a == b:
+#ifndef VEC_FN_IEQ
+#define VEC_FN_IEQ
+static inline union vec
+vec_ieq (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vceqq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return float version of a == b:
+#ifndef VEC_FN_UEQ
+#define VEC_FN_UEQ
+static inline union vec
+vec_ueq (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vceqq_u32(a.neon.u, b.neon.u) };
+}
+#endif
+
+// Return float version of a < b:
+#ifndef VEC_FN_LT
+#define VEC_FN_LT
+static inline union vec
+vec_lt (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcltq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a < b:
+#ifndef VEC_FN_ILT
+#define VEC_FN_ILT
+static inline union vec
+vec_ilt (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcltq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return unsigned integer version of a < b:
+#ifndef VEC_FN_ULT
+#define VEC_FN_ULT
+static inline union vec
+vec_ult (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcltq_u32(a.neon.u, b.neon.u) };
+}
+#endif
+
+// Return float version of a <= b:
+#ifndef VEC_FN_LE
+#define VEC_FN_LE
+static inline union vec
+vec_le (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcleq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a <= b:
+#ifndef VEC_FN_ILE
+#define VEC_FN_ILE
+static inline union vec
+vec_ile (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcleq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return unsigned integer version of a <= b:
+#ifndef VEC_FN_ULE
+#define VEC_FN_ULE
+static inline union vec
+vec_ule (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcleq_u32(a.neon.u, b.neon.u) };
+}
+#endif
+
+// Return float version of a > b:
+#ifndef VEC_FN_GT
+#define VEC_FN_GT
+static inline union vec
+vec_gt (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcgtq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a > b:
+#ifndef VEC_FN_IGT
+#define VEC_FN_IGT
+static inline union vec
+vec_igt (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcgtq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return unsigned integer version of a > b:
+#ifndef VEC_FN_UGT
+#define VEC_FN_UGT
+static inline union vec
+vec_ugt (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcgtq_u32(a.neon.u, b.neon.u) };
+}
+#endif
+
+// Return float version of a >= b:
+#ifndef VEC_FN_GE
+#define VEC_FN_GE
+static inline union vec
+vec_ge (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcgeq_f32(a.neon.f, b.neon.f) };
+}
+#endif
+
+// Return signed integer version of a >= b:
+#ifndef VEC_FN_IGE
+#define VEC_FN_IGE
+static inline union vec
+vec_ige (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcgeq_s32(a.neon.i, b.neon.i) };
+}
+#endif
+
+// Return unsigned integer version of a >= b:
+#ifndef VEC_FN_UGE
+#define VEC_FN_UGE
+static inline union vec
+vec_uge (const union vec a, const union vec b)
+{
+	return (union vec) { .neon.u = vcgeq_u32(a.neon.u, b.neon.u) };
+}
+#endif
