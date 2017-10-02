@@ -119,6 +119,7 @@ vtestu (const size_t start)
 
 // Add individual test functions:
 #include "test_arith.h"
+#include "test_compare.h"
 #include "test_convert.h"
 #include "test_instantiate.h"
 #include "test_logic.h"
@@ -136,6 +137,7 @@ main (void)
 	ret |= test_convert();
 	ret |= test_arith();
 	ret |= test_logic();
+	ret |= test_compare();
 
 	return ret;
 }
