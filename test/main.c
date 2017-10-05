@@ -118,6 +118,7 @@ vtestu (const size_t start)
 }
 
 // Add individual test functions:
+#include "test_3d.h"
 #include "test_arith.h"
 #include "test_compare.h"
 #include "test_convert.h"
@@ -138,6 +139,7 @@ main (void)
 	ret |= test_arith();
 	ret |= test_logic();
 	ret |= test_compare();
+	ret |= test_3d();
 
 	return ret;
 }
