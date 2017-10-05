@@ -512,3 +512,28 @@ vec_uge (const union vec a, const union vec b)
 	};
 }
 #endif
+
+// Return dot product of two 3D vectors:
+#ifndef VEC_FN_DOT
+#define VEC_FN_DOT
+static inline float
+vec_dot (const union vec a, const union vec b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+#endif
+
+// Return cross product of two 3D vectors:
+#ifndef VEC_FN_CROSS
+#define VEC_FN_CROSS
+static inline union vec
+vec_cross (const union vec a, const union vec b)
+{
+	return (union vec) {
+		.x = a.y * b.z - a.z * b.y,
+		.y = a.z * b.x - a.x * b.z,
+		.z = a.x * b.y - a.y * b.x,
+		.w = 0.0f,
+	};
+}
+#endif

@@ -391,3 +391,43 @@ vec_uge (const union vec a, const union vec b)
 	return vec_or(vec_ugt(a, b), vec_ueq(a, b));
 }
 #endif
+
+// Return dot product of two 3D vectors:
+#ifndef VEC_FN_DOT
+#define VEC_FN_DOT
+static inline float
+vec_dot (const union vec a, const union vec b)
+{
+	const __m128 mulx = _mm_mul_ps(a.sse.f, b.sse.f);
+	const __m128 muly = _mm_shuffle_ps(mulx, mulx, _MM_SHUFFLE(0, 0, 0, 1));
+	const __m128 mulz = _mm_shuffle_ps(mulx, mulx, _MM_SHUFFLE(0, 0, 0, 2));
+	const __m128 sum  = _mm_add_ps(mulx, _mm_add_ps(muly, mulz));
+
+	// Extract first element:
+	return ((union vec) { .xi = _mm_cvtsi128_si32(_mm_castps_si128(sum)) }).x;
+}
+#endif
+
+// Return cross product of two 3D vectors:
+#ifndef VEC_FN_CROSS
+#define VEC_FN_CROSS
+static inline union vec
+vec_cross (const union vec a, const union vec b)
+{
+	// Shuffle a:
+	const __m128 ayzx = _mm_shuffle_ps(a.sse.f, a.sse.f, _MM_SHUFFLE(0, 0, 2, 1));
+	const __m128 azxy = _mm_shuffle_ps(a.sse.f, a.sse.f, _MM_SHUFFLE(0, 1, 0, 2));
+
+	// Shuffle b:
+	const __m128 byzx = _mm_shuffle_ps(b.sse.f, b.sse.f, _MM_SHUFFLE(0, 0, 2, 1));
+	const __m128 bzxy = _mm_shuffle_ps(b.sse.f, b.sse.f, _MM_SHUFFLE(0, 1, 0, 2));
+
+	// (ay * bz), (az * bx), (ax * by), (ax * bx):
+	const __m128 mul1 = _mm_mul_ps(ayzx, bzxy);
+
+	// (az * by), (ax * bz), (ay * bx), (ax * bx):
+	const __m128 mul2 = _mm_mul_ps(azxy, byzx);
+
+	return (union vec) { .sse.f = _mm_sub_ps(mul1, mul2) };
+}
+#endif

@@ -403,3 +403,38 @@ vec_uge (const union vec a, const union vec b)
 	return (union vec) { .neon.u = vcgeq_u32(a.neon.u, b.neon.u) };
 }
 #endif
+
+// Return dot product of two 3D vectors:
+#ifndef VEC_FN_DOT
+#define VEC_FN_DOT
+static inline float
+vec_dot (const union vec a, const union vec b)
+{
+	const float32x4_t mul = vmulq_f32(a.neon.f, b.neon.f);
+	return vgetq_lane_f32(mul, 0)
+	     + vgetq_lane_f32(mul, 1)
+	     + vgetq_lane_f32(mul, 2);
+}
+#endif
+
+// Return cross product of two 3D vectors (intrinsics version):
+#ifndef VEC_FN_CROSS
+#define VEC_FN_CROSS
+static inline union vec
+vec_cross (const union vec a, const union vec b)
+{
+	const float32x4_t ayzwx = (float32x4_t) vextq_u32((uint32x4_t) a.neon.f, (uint32x4_t) a.neon.f, 1);
+	const float32x4_t byzwx = (float32x4_t) vextq_u32((uint32x4_t) b.neon.f, (uint32x4_t) b.neon.f, 1);
+
+	const float32x4_t ayzxw = vcombine_f32(vget_low_f32(ayzwx), vrev64_f32(vget_high_f32(ayzwx)));
+	const float32x4_t byzxw = vcombine_f32(vget_low_f32(byzwx), vrev64_f32(vget_high_f32(byzwx)));
+
+	const float32x2x2_t azxwy_pair = vtrn_f32(vget_high_f32(a.neon.f), vget_low_f32(a.neon.f));
+	const float32x2x2_t bzxwy_pair = vtrn_f32(vget_high_f32(b.neon.f), vget_low_f32(b.neon.f));
+
+	const float32x4_t azxyw = vcombine_f32(azxwy_pair.val[0], vrev64_f32(azxwy_pair.val[1]));
+	const float32x4_t bzxyw = vcombine_f32(bzxwy_pair.val[0], vrev64_f32(bzxwy_pair.val[1]));
+
+	return (union vec) { .neon.f = vmlsq_f32(vmulq_f32(ayzxw, bzxyw), byzxw, azxyw) };
+}
+#endif

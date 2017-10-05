@@ -19,6 +19,12 @@
     #include <emmintrin.h>
   #endif
 
+  // Check for SSE4 support:
+  #if defined(__SSE4_1__)
+    #define VEC_SSE41
+    #include <nmmintrin.h>
+  #endif
+
   // Check for ARM NEON support:
   #if defined(__ARM_NEON__) || defined(__ARM_NEON)
     #define VEC_NEON
@@ -116,6 +122,10 @@ union vec {
 // cannot define will eventually be defined by a "less powerful" file. The
 // generic file acts as a catch-all in case none of the more powerful methods
 // are available.
+
+#if defined(VEC_SSE41)
+  #include "private/sse41.h"
+#endif
 
 #if defined(VEC_SSE2)
   #include "private/sse2.h"
