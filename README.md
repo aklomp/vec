@@ -7,6 +7,111 @@ towards 3D graphics, but can be used for any type of 32×4 bit vector.
 
 [![Build Status](https://travis-ci.org/aklomp/vec.svg)](https://travis-ci.org/aklomp/vec)
 
+## Usage
+
+This library is header-only, meaning that there is no code to compile, just a
+single header file to include. This header file is `include/vec/vec.h`. Include
+that file into your source code and you can use the library.
+
+(That file will conditionally pull in a number of platform-specific files from
+a subdirectory, but that all happens invisibly in the background.)
+
+In general, this library will be included in other projects as a Git
+subrepository. The project's build environment should be configured to add the
+following search path to `CFLAGS`:
+
+```make
+CFLAGS += -I path/to/vec/include
+```
+
+Now you can include the library as:
+
+```c
+#include <vec/vec.h>
+```
+
+The library's backend has support for the following vector formats, in order of
+preference from highest to lowest:
+
+- On x86: SSE4 SIMD operations.
+- On x86: SSE2 SIMD operations.
+- On ARM: NEON SIMD operations (NEON32) using inline assembly.
+- On ARM: NEON SIMD operations (NEON32) using intrinsics.
+- On GCC or Clang, if new enough: GCC-style vector extensions. These are
+  "generic" cross-platform vector types that are not tied to any one hardware
+  implementation. The compiler turns these into appropriate SIMD instructions
+  for the platform.
+- The old-fashioned way: all operations are done separately on each of the four
+  elements of the union. This uses only plain C and should work on all
+  platforms.
+
+Support for these vector formats is detected at compile time by testing
+predefined compiler macros. The backends with higher preference are "allowed"
+to define a given function first. Those with lower preference fill in the
+functions that haven't yet been defined. The generic backend acts as a backstop
+and defines all functions that have not been defined.
+
+## Data structure
+
+The basic data structure is the `union vec`. As the name implies, this is a C
+union that wraps a 128-bit data structure which is internally divided into four
+32-bit elements. Depending on context, these elements can be interpreted as
+32-bit floats, 32-bit signed ints, 32-bit unsigned ints, or as a single 128-bit
+SIMD vector with four independent lanes.
+
+The charm of the `union vec` is that it allows us to access the same underlying
+bits *as if* it's any of these data types, in a relatively typesafe way. In the
+same line of code, the `union vec` can be treated as an array of floating point
+elements, or as a single SIMD register.
+
+The abstraction is invisible and seamless to the programmer, because the
+compiler will transparently handle the different views of memory. Aliasing
+memory through a union is quite cheap because no type conversion is performed.
+We merely look at the same bits in memory through different glasses. Compilers
+and processors have good support for that kind of access.
+
+`union vec` provides the following ways of interpreting 16 bytes of memory:
+
+```c
+// Declare a variable for demo purposes:
+union vec vec;
+
+// As a series of four named 32-bit floating-point variables,
+// named to match 3D graphics vectors (the common use case):
+float vec.x, vec.y, vec.z, vec.w;
+
+// As a series of four named 32-bit signed integer variables:
+int32_t vec.xi, vec.yi, vec.zi, vec.wi;
+
+// As a series of four named 32-bit unsigned integer variables:
+uint32_t vec.xu, vec.yu, vec.zu, vec.wu;
+
+// As arrays of four 32-bit floating-point, signed integer
+// and unsigned integer variables:
+float    vec.elem.f[4];
+int32_t  vec.elem.i[4];
+uint32_t vec.elem.u[4];
+
+// If GCC-style portable vector extensions are available, we
+// define vector extension typedefs called 'vec4f', 'vec4i'
+// and 'vec4u', and define the following extra aliases:
+vec4f vec.gcc.f;
+vec4i vec.gcc.i;
+vec4u vec.gcc.u;
+
+// If x86_64 SSE2 is available, the following extra aliases
+// are available (i and u are functionally identical):
+__m128  vec.sse.f;
+__m128i vec.sse.i;
+__m128i vec.sse.u;
+
+// If ARM NEON is available, the following extra aliases are
+// available:
+float32x4_t vec.neon.f;
+int32x4_t   vec.neon.i;
+uint32x4_t  vec.neon.u;
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
