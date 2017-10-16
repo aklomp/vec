@@ -112,6 +112,63 @@ int32x4_t   vec.neon.i;
 uint32x4_t  vec.neon.u;
 ```
 
+## Instantiation
+
+Macros are available for compile-time static initialization of vectors. Use
+these for hard-coded, static values.
+
+```c
+// Create a floating-point vector:
+union vec a = VEC(1.0f, 2.0f, 3.0f, 4.0f);
+
+// Alternatively, for floating-point, it is possible to use union
+// initialization syntax directly:
+union vec b = { { 1.0f, 2.0f, 3.0f, 4.0f } };
+
+// Create a signed integer vector:
+union vec c = VEC_I(-2, -1, 0, 1);
+
+// Create an unsigned integer vector:
+union vec d = VEC_U(1, 2, 3, 4);
+```
+
+To instantiate an `union vec` at runtime from constant literals or other
+variables, use the provided inline functions.
+
+```c
+// Create a floating-point vector:
+static inline union vec
+vec (const float x, const float y, const float z, const float w);
+
+// Create a signed integer vector:
+static inline union vec
+vec_i (const int32_t x, const int32_t y, const int32_t z, const int32_t w);
+
+// Create an unsigned integer vector:
+static inline union vec
+vec_u (const uint32_t x, const uint32_t y, const uint32_t z, const uint32_t w);
+```
+
+```c
+// Create a vector set to all zeros, valid for all numeric types:
+static inline union vec
+vec_zero (void);
+```
+
+```c
+// Create a floating-point vector with four identical elements:
+static inline union vec
+vec_1 (const float val);
+
+// Create a signed integer vector with four identical elements:
+static inline union vec
+vec_i1 (const int32_t val);
+
+// Create an unsigned integer vector with four identical elements:
+static inline union vec
+vec_u1 (const uint32_t val);
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
