@@ -183,6 +183,54 @@ static inline union vec
 vec_to_float (const union vec v);
 ```
 
+## Arithmetic
+
+Addition, subtraction, multiplication and division are available.
+Multiplication and division are only supported for floats because SIMD
+instruction sets have spotty support for these operations on integers. If you
+need integer multiplications or divisions, convert to float, do the float
+operation, and convert back.
+
+```c
+// Floating-point addition (a + b):
+static inline union vec
+vec_add (const union vec a, const union vec b);
+
+// Signed integer addition (a + b):
+static inline union vec
+vec_iadd (const union vec a, const union vec b);
+
+// Unsigned integer addition (a + b):
+static inline union vec
+vec_uadd (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point subtraction (a - b):
+static inline union vec
+vec_sub (const union vec a, const union vec b);
+
+// Signed integer subtraction (a - b):
+static inline union vec
+vec_isub (const union vec a, const union vec b);
+
+// Unsigned integer subtraction (a - b):
+static inline union vec
+vec_usub (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point multiplication (a * b):
+static inline union vec
+vec_mul (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point division (a / b):
+static inline union vec
+vec_div (const union vec a, const union vec b);
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
