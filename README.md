@@ -254,6 +254,84 @@ static inline union vec
 vec_not (const union vec a);
 ```
 
+## Comparisons
+
+Comparison functions are available for all operand types. These functions
+return a `union vec` where each 32-bit lane is all-ones (`0xFFFFFFFF`) if the
+comparison is true for those lanes in the source vectors, or all-zeros if the
+comparison is false. This "masking" vector can be used in combination with the
+bitwise logical functions to construct new vectors.
+
+```c
+// Floating-point test of a < b:
+static inline union vec
+vec_lt (const union vec a, const union vec b);
+
+// Signed integer test of a < b:
+static inline union vec
+vec_ilt (const union vec a, const union vec b);
+
+// Unsigned integer test of a < b:
+static inline union vec
+vec_ult (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point test of a <= b:
+static inline union vec
+vec_le (const union vec a, const union vec b);
+
+// Signed integer test of a <= b:
+static inline union vec
+vec_ile (const union vec a, const union vec b);
+
+// Unsigned integer test of a <= b:
+static inline union vec
+vec_ule (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point test of a == b:
+static inline union vec
+vec_eq (const union vec a, const union vec b);
+
+// Signed integer test of a == b:
+static inline union vec
+vec_ieq (const union vec a, const union vec b);
+
+// Unsigned integer test of a == b:
+static inline union vec
+vec_ueq (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point test of a >= b:
+static inline union vec
+vec_ge (const union vec a, const union vec b);
+
+// Signed integer test of a >= b:
+static inline union vec
+vec_ige (const union vec a, const union vec b);
+
+// Unsigned integer test of a >= b:
+static inline union vec
+vec_uge (const union vec a, const union vec b);
+```
+
+```c
+// Floating-point test of a > b:
+static inline union vec
+vec_gt (const union vec a, const union vec b);
+
+// Signed integer test of a > b:
+static inline union vec
+vec_igt (const union vec a, const union vec b);
+
+// Unsigned integer test of a > b:
+static inline union vec
+vec_ugt (const union vec a, const union vec b);
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
