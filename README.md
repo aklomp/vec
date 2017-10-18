@@ -169,6 +169,20 @@ static inline union vec
 vec_u1 (const uint32_t val);
 ```
 
+## Conversion
+
+Functions are available to convert floats to signed integers and vice versa.
+
+```c
+// Convert a float vector to signed integer:
+static inline union vec
+vec_to_int (const union vec v);
+
+// Convert a signed integer vector to float:
+static inline union vec
+vec_to_float (const union vec v);
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
