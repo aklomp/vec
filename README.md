@@ -332,6 +332,28 @@ static inline union vec
 vec_ugt (const union vec a, const union vec b);
 ```
 
+## 3D vector operations
+
+Dot and cross product functions are available for 3D vectors in (x, y, z, w)
+format. These functions are only available for floating point operands.
+
+```c
+// Dot product of a and b:
+//   ret = ax * bx + ay * by + az * bz
+static inline float
+vec_dot (const union vec a, const union vec b);
+```
+
+```c
+// Cross product of a and b:
+//   x = ay * bz - az * by
+//   y = az * bx - ax * bz
+//   z = ax * by - ay * bx
+//   w = 0
+static inline union vec
+vec_cross (const union vec a, const union vec b);
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
