@@ -231,6 +231,29 @@ static inline union vec
 vec_div (const union vec a, const union vec b);
 ```
 
+## Bitwise logic
+
+The bitwise logical functions `AND`, `NOT`, `OR` and `XOR` are available. These
+operate on the unsigned integer representation.
+
+```c
+// Bitwise a AND b:
+static inline union vec
+vec_and (const union vec a, const union vec b);
+
+// Bitwise a OR b:
+static inline union vec
+vec_or (const union vec a, const union vec b);
+
+// Bitwise a XOR b:
+static inline union vec
+vec_xor (const union vec a, const union vec b);
+
+// Bitwise NOT a:
+static inline union vec
+vec_not (const union vec a);
+```
+
 ## License
 
 MIT license. See `LICENSE` file for details.
