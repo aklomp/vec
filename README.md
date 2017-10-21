@@ -354,6 +354,19 @@ static inline union vec
 vec_cross (const union vec a, const union vec b);
 ```
 
+## Testing
+
+An extensive test suite can be found in `test/`. Typing `make test` in that
+directory will compile and run three binaries: one with only the generic
+per-element routines, one with GCC vector extension routines enabled but not
+SIMD, and one with SIMD routines enabled. If all tests pass, a binary will run
+cleanly without any output and return zero. On error, it will print diagnostics
+and return nonzero. This library has been tested on all supported platforms.
+
+Automated tests are run on every commit by [Travis CI](https://travis-ci.org/aklomp/vec).
+
+[![Build Status](https://travis-ci.org/aklomp/vec.svg)](https://travis-ci.org/aklomp/vec)
+
 ## License
 
 MIT license. See `LICENSE` file for details.
