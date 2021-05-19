@@ -1,7 +1,7 @@
 CFLAGS += -std=c11 -march=native
 CFLAGS += -I ../include
 
-# Binary files to generate:
+# Binary files to generate.
 BINS = test-gcc test-generic test-host
 OBJS = $(BINS:=.o)
 
@@ -10,18 +10,18 @@ OBJS = $(BINS:=.o)
 all: $(BINS)
 
 # Suppress platform-dependent hardware SIMD support, which leaves
-# GCC vector extensions and generic functions:
+# GCC vector extensions and generic functions.
 test-gcc: CFLAGS += -DVEC_SUPPRESS_HW
 
 # Suppress SIMD and GCC vector extension support, which leaves
-# only generic functions:
+# only generic functions.
 test-generic: CFLAGS += -DVEC_SUPPRESS_HW -DVEC_SUPPRESS_GCC
 
 $(OBJS): main.c
-	$(CC) -o $@ -c $^ $(CFLAGS)
+	$(CC) $(CFLAGS) -o $@ -c $^
 
 $(BINS): %: %.o
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CC) $(LDFLAGS) -o $@ $^
 
 clean:
 	$(RM) $(BINS) $(OBJS)
