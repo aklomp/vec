@@ -1,8 +1,26 @@
 language: c
 
-compiler:
-  - clang
-  - gcc
-
 script:
   - make -C test test
+
+matrix:
+  include:
+    - name: linux-amd64-gcc
+      os: linux
+      arch: amd64
+      compiler: gcc
+
+    - name: linux-amd64-clang
+      os: linux
+      arch: amd64
+      compiler: clang
+
+    - name: linux-arm64-gcc
+      os: linux
+      arch: arm64
+      compiler: gcc
+
+    - name: linux-arm64-clang
+      os: linux
+      arch: arm64
+      compiler: clang
