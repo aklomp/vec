@@ -1,3 +1,4 @@
 *.o
-test-host
+test-gcc
 test-generic
+test-host
