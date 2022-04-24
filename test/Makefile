@@ -1,4 +1,4 @@
-CFLAGS += -std=c11 -march=native
+CFLAGS += -std=c11
 CFLAGS += -I ../include
 
 # Binary files to generate.
