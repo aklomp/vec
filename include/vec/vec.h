@@ -40,9 +40,9 @@
 // Define architecture-independent vector types.
 // This syntax is valid for GCC and LLVM/Clang:
 #if defined(VEC_GCC)
-typedef float    vec4f __attribute__ ((vector_size (16))) __attribute__ ((aligned (16)));
-typedef int32_t  vec4i __attribute__ ((vector_size (16))) __attribute__ ((aligned (16)));
-typedef uint32_t vec4u __attribute__ ((vector_size (16))) __attribute__ ((aligned (16)));
+typedef float    vec4f __attribute__ ((vector_size (16), aligned (16)));
+typedef int32_t  vec4i __attribute__ ((vector_size (16), aligned (16)));
+typedef uint32_t vec4u __attribute__ ((vector_size (16), aligned (16)));
 #endif
 
 // Union to represent a 4x32-bit (128-bit) vector in various ways:
