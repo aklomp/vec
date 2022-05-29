@@ -1,5 +1,5 @@
 // Return float version of a / b:
-#ifndef VEC_FN_DIV
+#if !defined(VEC_FN_DIV) && !defined(__aarch64__)
 #define VEC_FN_DIV
 static inline union vec
 vec_div (const union vec a, const union vec b)
@@ -23,7 +23,7 @@ vec_div (const union vec a, const union vec b)
 #endif
 
 // Return cross product of two 3D vectors:
-#ifndef VEC_FN_CROSS
+#if !defined(VEC_FN_CROSS) && !defined(__aarch64__)
 #define VEC_FN_CROSS
 static inline union vec
 vec_cross (const union vec a, const union vec b)
