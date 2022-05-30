@@ -11,7 +11,7 @@ vec_div (const union vec a, const union vec b)
 		"fdiv %0.4s,%1.4s,%2.4s   \n\t"
 
 		: "=&w" (ret)				// Outputs: ret=v0
-		: "%w" (a.neon.f), "w" (b.neon.f)	// Inputs: a=v1, b=v2
+		: "w" (a.neon.f), "w" (b.neon.f)	// Inputs: a=v1, b=v2
 	);
 #else
 	float32x4_t ret, tmp;
@@ -25,7 +25,7 @@ vec_div (const union vec a, const union vec b)
 		"vmulq.f32   %q0,%q2,%q0  \n\t"
 
 		: "=&w" (ret), "=&w" (tmp)		// Outputs: ret=q0, tmp=q1
-		: "%w" (a.neon.f), "w" (b.neon.f)	// Inputs: a=q2, b=q3
+		: "w" (a.neon.f), "w" (b.neon.f)	// Inputs: a=q2, b=q3
 	);
 #endif
 
@@ -61,7 +61,7 @@ vec_cross (const union vec a, const union vec b)
 		"fmls %0.4s,%1.4s,%4.4s       \n\t"	// v0 := ayzxw * bzxyw - azxyw * byzxw
 
 		: "=&w" (ret), "=&w" (t1), "=&w" (t2),	// Outputs: ret=v0, t1=v1, t2=v2
-		  "+%w" (atmp), "+w" (btmp)		// Outputs (reused inputs): a=v3, b=v4
+		  "+w" (atmp), "+w" (btmp)		// Outputs (reused inputs): a=v3, b=v4
 	);
 #else
 	float32x4_t ret, tmp;
@@ -81,7 +81,7 @@ vec_cross (const union vec a, const union vec b)
 		"vmlsq.f32 %q0,%q2,%q1     \n\t"	// q0 := ayzxw * bzxyw - azxyw * byzxw
 
 		: "=&w" (ret), "=&w" (tmp),		// Outputs: ret=q0, tmp=q1
-		  "+%w" (atmp), "+w" (btmp)		// Outputs (reused inputs): a=q2, b=q3
+		  "+w" (atmp), "+w" (btmp)		// Outputs (reused inputs): a=q2, b=q3
 	);
 #endif
 
