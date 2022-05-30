@@ -54,7 +54,7 @@
 
 // Approximate float comparison:
 #define APPROX(a, b) \
-	(fabsf((a) - (b)) <= fabsf((a) * 0.01f))
+	(fabsf((a) - (b)) <= fabsf((a) * 0.01f + 1.0f))
 
 // Open an 'if' statement block if float values are not approximately equal
 #define IF_NOT_APPROX(xe, ye, ze, we, v) \
