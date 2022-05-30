@@ -1,9 +1,19 @@
 // Return float version of a / b:
-#if !defined(VEC_FN_DIV) && !defined(__aarch64__)
+#ifndef VEC_FN_DIV
 #define VEC_FN_DIV
 static inline union vec
 vec_div (const union vec a, const union vec b)
 {
+#ifdef __aarch64__
+	float32x4_t ret;
+
+	__asm__ (
+		"fdiv %0.4s,%1.4s,%2.4s   \n\t"
+
+		: "=&w" (ret)				// Outputs: ret=v0
+		: "%w" (a.neon.f), "w" (b.neon.f)	// Inputs: a=v1, b=v2
+	);
+#else
 	float32x4_t ret, tmp;
 
 	__asm__ (
@@ -17,6 +27,7 @@ vec_div (const union vec a, const union vec b)
 		: "=&w" (ret), "=&w" (tmp)		// Outputs: ret=q0, tmp=q1
 		: "%w" (a.neon.f), "w" (b.neon.f)	// Inputs: a=q2, b=q3
 	);
+#endif
 
 	return (union vec) { .neon.f = ret };
 }
